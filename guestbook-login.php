@@ -1,28 +1,35 @@
 <?php
-	require('config/config.php');
-	require('config/db.php');
-	if(isset($_POST['submit'])){
-		$username = mysqli_real_escape_string($conn,$_POST['username']);
-		$password = mysqli_real_escape_string($conn,$_POST['password']);
+    require('config/config.php');
+    require('config/db.php');
+    session_start();
 
-		if ($username != "" && $password != ""){
+  
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+       
+       $username = mysqli_real_escape_string($conn,$_POST['username']);
+       $password = mysqli_real_escape_string($conn,$_POST['password']); 
+       
+       $sql = "SELECT uid FROM USERACCOUNT WHERE username = '$username' and password = '$password'";
+       $result = mysqli_query($conn, $sql);
+       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+       
+       if (isset($row)) {
+       $active = $row['active'];
+       $count = mysqli_num_rows($result);
 
-			$query = "select count(*) as cntUser from login where username='".$username."' and password='".$password."'";
-			$result = mysqli_query($conn,$query);
-			$row = mysqli_fetch_array($result);
+       if($count == 1) {
+        $_SESSION['login_user'] = $username;
+        
+        header("location: guestbook-list.php");
+     }else {
+        $error = "Account does not exist.";
+     }
+      } else {
+        echo "<font color='red'>Account does not exist.</font>";
+      }
+    }
 
-			$count = $row['cntUser'];
 
-			if($count > 0){
-            $_SESSION['username'] = $username;
-            header('Location: guestbook-list.php');
-			}else{
-				echo "Invalid username and password";
-				}
-
-		}
-
-	}
 ?>
 <?php include('inc/header.php'); ?>
   <br/>

@@ -5,14 +5,14 @@
 	// Check For Submit
 	if(isset($_POST['submit'])){
 		// Get form data
-		$lastname = mysqli_real_escape_string($conn,$_POST['lastname']);
-		$firstname = mysqli_real_escape_string($conn,$_POST['firstname']);
+		$lname = mysqli_real_escape_string($conn,$_POST['lname']);
+		$fname = mysqli_real_escape_string($conn,$_POST['fname']);
 		$address = mysqli_real_escape_string($conn,$_POST['address']);
 
-		$query = "INSERT INTO person(lastname, firstname,address,logdt) VALUES('$lastname', '$firstname', '$address', now())";
+		$query = "INSERT INTO PERSON(lastname, firstname, address, logdt) VALUES('$lname', '$fname', '$address', now())";
 
 		if(mysqli_query($conn, $query)){
-      header('Location: index.php');
+      header('Location: guestbook-login.php');
 		} else {
 			echo 'ERROR: '. mysqli_error($conn);
 		}
@@ -28,13 +28,13 @@
   <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>" class="was-validated">
     <div class="form-group">
       <label for="uname">Last name:</label>
-      <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="lastname" required>
+      <input type="text" class="form-control" id="lname" placeholder="Enter last name" name="lname" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="form-group">
       <label for="uname">First name:</label>
-      <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="firstname" required>
+      <input type="text" class="form-control" id="fname" placeholder="Enter first name" name="fname" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
@@ -55,4 +55,3 @@
   </form>
 </div>
 <?php include('inc/footer.php'); ?>
-
